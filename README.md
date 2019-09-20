@@ -18,7 +18,7 @@ Desenvolva um sistema para calcular esse deslocamento da extremidade de um fogue
 1. Implementar algoritmo para calcular ***d*** pelo método da **Bisseção**. 
 2. Implementar algoritmo para calcular ***d*** pelo método da **Posição Falsa**. 
 3. Implementar algoritmo para calcular ***d*** pelo método de **Newton-Raphson**.
-4. Calibrar o sistemausando como padrão ***a= 1***, ***isolamento = (2, 3)*** e ***ε= 10^-5***.
+4. Calibrar o sistema usando como padrão ***a= 1***, ***isolamento = (2, 3)*** e ***ε= 10^-5***.
 5. Fornecer um quadro resposta, variando os valores de apara vários foguetes.
 6. Fornecer um quadro comparativo, com isolamento, raízes e dados para cada método.
 7. Analisar o efeito da variação do valor de ***a*** de cada foguete, *para cada método dado*.
