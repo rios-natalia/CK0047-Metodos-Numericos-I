@@ -11,23 +11,27 @@ class Methods{
 			return -1*log(d) + a -1;
 		};
 
-		// TÁ UMA BOSTA TEM QUE REFAZER ESSA MERDA 
 		vector<double> getInterval(double a=1){
-			double aI = 0.000001;
-			double bI = 10;
-			cout << "\n\nf(aI): "<< rocketFunction(aI, a) << "\nf(bI): "<<rocketFunction(bI, a);
-			while(rocketFunction(aI, a)*rocketFunction(bI, a) > 0){
-				if(aI == 0.000001){
-					aI += 9.999999;	
+			double index = 0.000001; // 2 ^ pequeno
+			double index2 = 1; // 2 ^ 0
+
+			double changed = rocketFunction(index, a)*rocketFunction(index2, a);
+			
+			while(changed > 0){
+				if(index == 0.000001){
+					index = 1;
+					index2 = 2;
 				}
 				else{
-					aI += 10;
+					index = index*2;
+					index2 = index2*2;
 				}
-				bI += 10;
+				changed = rocketFunction(index, a)*rocketFunction(index2, a);
 			}
+
 			vector <double> result;
-			result.push_back(aI);
-			result.push_back(bI);
+			result.push_back(index);
+			result.push_back(index2);
 			return result;
 		};
 	public:
