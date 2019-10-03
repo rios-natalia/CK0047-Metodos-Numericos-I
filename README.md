@@ -30,3 +30,19 @@ Dados de **ENTRADA**:
   
 Dados de ***SAÍDA***:
   - Quadros resposta (com d, e a para cada foguete e método) e comparativo.
+
+## Backlog
+
+Índice | Item | Status
+-| - | - 
+1 | Bisseção |:heavy_check_mark:|
+2 | Posição Falsa |:x:|
+3 | Newton Raphson |:x:|
+4 | Aplicar padrões |:x:|
+5 | Preparar quadro resposta |:x:|
+6 | Preparar quadro comparativo (foguetes) |:x:|
+7 | Preparar quadro comparativo (métodos) |:x:|
+8 | Criar interface do usuário |:x:|
+## Observações
+
+* A função não admite valores para D <= 0. Logo, precisamos fazer essa checagem sempre e alertar o usuário, caso contrário, erros irão ocorrer
