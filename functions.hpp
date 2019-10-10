@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
-#include<tuple> // for tuple 
+#include <tuple> // for tuple 
 using namespace std;
 
 double genericPolynomialFunction(vector<double> coeficients , double x){
