@@ -90,6 +90,25 @@ class Methods{
 			return calculateByBissection(resposta[0], resposta[1], error, maxK, funA);
 		}
 		
+		double calculateByNewtonRhapson(double x0, double error1, double error2, int maxK, double funA = 1){
+			double fx = rocketFunction(x0, funA);
+			int k = 0;
+
+			if(abs(fx) < error1){
+				return x0;
+			}
+
+			while(k < maxK) {
+				double x1 = x0 - rocketFunction(x0, funA)/rocketFunctionDerivative(x0, funA);
+			    if(abs(rocketFunction(x1, funA)) < error1 || abs(x1-x0) < error2) {
+			    	return x1;
+			    }
+			    x0 = x1;
+			    k++;
+			  }
+			  return x0;
+		}
+
 		long double calculateByFalsePositionNoInterval(double error1, double error2, int maxK, double funA = 1){
 			vector <double> resposta = calculateFunctionInterval(funA);
 			cout << "Intervalo: " << resposta[0] << "  " << resposta[1];
