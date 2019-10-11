@@ -46,7 +46,7 @@ int main() {
 		cout << "A resposta aproximada é: " << res << "\n\n";
 	}*/
 
-	Answer resposta = metodos.calculateByNewtonRhapson(1e+21,0.000001, 0.000001, 1000, 50);
+	Answer resposta = metodos.calculateByFalsePositionDefault();
 	if(resposta.getErrorFlag()){
 		cout << "\nUm erro ocorreu!\n" << resposta.getErrorMessage() << "\n\n";
 	}
@@ -54,8 +54,8 @@ int main() {
 		cout << "\nCálculo da função concluída!";
 		cout << "\nResposta aproximada: " << resposta.getResult();
 		cout << "\nNúmero de iterações: " << resposta.getIterations();
-		cout << "\nTempo: " << resposta.getTime() << "\n\n";
-		
+		cout << "\nTempo: " << resposta.getTime();
+		cout << "\nErro absoluto: " << resposta.getAbsoluteError() << "\n\n";
 	}
 	
 	return 0;
