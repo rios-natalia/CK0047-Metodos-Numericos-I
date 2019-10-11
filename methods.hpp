@@ -90,16 +90,28 @@ class Methods{
 			return calculateByBissection(resposta[0], resposta[1], error, maxK, funA);
 		}
 		
+		// OBSERVAÇÂO: O chute desse método jamais poderá <= 0!
 		double calculateByNewtonRhapson(double x0, double error1, double error2, int maxK, double funA = 1){
+			
+			if(x0 <= 0){
+				cout << "Chute inválido!\n";
+				return -1;
+			}
+
 			double fx = rocketFunction(x0, funA);
 			int k = 0;
-
 			if(abs(fx) < error1){
 				return x0;
 			}
-
+			
+			
 			while(k < maxK) {
+				if(rocketFunctionDerivative(x0, funA) == 0){
+					cout << "Chute inválido!\n";
+					return -1;
+				}
 				double x1 = x0 - rocketFunction(x0, funA)/rocketFunctionDerivative(x0, funA);
+				
 			    if(abs(rocketFunction(x1, funA)) < error1 || abs(x1-x0) < error2) {
 			    	return x1;
 			    }

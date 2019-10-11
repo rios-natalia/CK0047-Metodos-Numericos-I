@@ -13,7 +13,7 @@ int main() {
 		vector<double> resposta = metodos.calculateFunctionInterval(a);
 		cout << "\n\n\nPara a = " << a << " temos: \n" << resposta[0] << "  " << resposta[1];
 	}*/
-	
+	/*
 	double a;
 	cout << "Digite o valor de A: ";
 	cin  >> a;
@@ -31,13 +31,19 @@ int main() {
 		cout << "Digite o número máximo de iterações a ser utilizado: ";
 		cin >> maxK;
 	}
-	
+	*/
 	double x0;
-	cout << "Digite um chute inicial";
+	cout << "Digite um chute inicial: ";
 	cin >> x0;
 	
-	double res = metodos.calculateByNewtonRhapson(x0, e1, e2, maxK, a);
-	cout << "A resposta aproximada é: " << res;
-
+	double res = metodos.calculateByNewtonRhapson(x0, 0.000001, 0.000001, 100, 1);
+	
+	if(res == -1){
+		cout << "Um erro ocorreu, cheque os parâmetros de entrada!\n\n";
+	}
+	else{
+		cout << "A resposta aproximada é: " << res << "\n\n";
+	}
+	
 	return 0;
 }
