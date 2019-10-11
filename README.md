@@ -38,7 +38,7 @@ Dados de ***SAÍDA***:
 1 | Bisseção |:heavy_check_mark:|
 2 | Posição Falsa |:heavy_check_mark:|
 3 | Newton Raphson |:heavy_check_mark:|
-4 | Aplicar padrões |:x:|
+4 | Aplicar padrões |:heavy_check_mark|
 5 | Preparar quadro resposta |:x:|
 6 | Preparar quadro comparativo (foguetes) |:x:|
 7 | Preparar quadro comparativo (métodos) |:x:|
