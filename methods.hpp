@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include "Answer.hpp"
 using namespace std;
 class Methods{
 	private:
@@ -49,8 +50,8 @@ class Methods{
 		// A, B e maxK podem ou não ser entradas
 		// Error é uma entrada (precisão)
 		// Não confundir funA (a constante da função) com a (início do intervalo)
-		double calculateByBissection(double a, double b, double error, int maxK, double funA = 1){
-			cout << "Calculando com : \n Intervalo: " << a << " " << b << "\n A: " << funA;
+		Answer calculateByBissection(double a, double b, double error, int maxK, double funA = 1){
+			clock_t start, end; start = clock(); 
 			double x, fx, fa, fb, interval;
 			int k = 0;
 		    interval = fabs(b-a);
@@ -59,15 +60,14 @@ class Methods{
 		        fx = rocketFunction(x, funA);
 		        fa = rocketFunction(a, funA);
 		        fb = rocketFunction(b, funA);
-
-		        if(fa*fb > 0){
-					cout << "\nUm erro ocorreu!";
-					cout << "\n" << fa << " " << fb;
-					cout << "O intervalo é inválido!";
-		            return 0;
+				
+		        if(isnan(fx) > 0 || fa*fb > 0){
+					return Answer("O intervalo é inválido!");
 		        }
+
 		        if(interval <= error){
-		            return x;
+					end = clock(); 
+					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
 		        }
 
 		        if(fx*fa < 0){
@@ -81,43 +81,77 @@ class Methods{
 		        
 		        k ++;
 		    }
-		    return x;
+			end = clock(); 
+			return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
 		}
 
-		double calculateByBissectionNoInterval(double error, int maxK, double funA = 1){
+		Answer calculateByBissectionNoInterval(double error, int maxK, double funA = 1){
 			vector<double> resposta = calculateFunctionInterval(funA);
-			cout << "Intervalo: " << resposta[0] << "  " << resposta[1];
 			return calculateByBissection(resposta[0], resposta[1], error, maxK, funA);
 		}
 		
-		double calculateByNewtonRhapson(double x0, double error1, double error2, int maxK, double funA = 1){
-			double fx = rocketFunction(x0, funA);
-			int k = 0;
+		// OBSERVAÇÂO: O chute desse método jamais poderá <= 0!
+		Answer calculateByNewtonRhapson(double x0, double error1, double error2, int maxK, double funA = 1){
+			clock_t start, end; start = clock(); 
 
-			if(abs(fx) < error1){
-				return x0;
+			if(x0 <= 0){
+				end = clock(); 
+				return Answer("O chute dado é inválido!");
 			}
 
+			double fx = rocketFunction(x0, funA);
+			int k = 0;
+			if(abs(fx) < error1){
+				end = clock(); 
+				return Answer(x0, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+			}
+			
+			
 			while(k < maxK) {
+				
 				double x1 = x0 - rocketFunction(x0, funA)/rocketFunctionDerivative(x0, funA);
+				
+				if(isnan(x1) || isnan(fx) || rocketFunctionDerivative(x0, funA) == 0){
+					return Answer("O chute dado é inválido!");
+				}
+
 			    if(abs(rocketFunction(x1, funA)) < error1 || abs(x1-x0) < error2) {
-			    	return x1;
+					end = clock(); 
+					return Answer(x1, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
 			    }
 			    x0 = x1;
 			    k++;
 			  }
-			  return x0;
+			end = clock(); 
+			return Answer(x0, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
 		}
 
-		long double calculateByFalsePositionNoInterval(double error1, double error2, int maxK, double funA = 1){
+		// Nossa derivada precisa ser diferente de zero sempre, logo, se:
+		// -ln d + a - 1 != 0 então
+		// ln d != a - 1
+		// Portanto, é seguro chutar ln d = a
+		// Logo, nosso chute é e^a
+		// Infelizmente, esse chute ACERTA,então não vamos usá-lo
+		//                       :(
+		Answer calculateByNewtonRhapsonEulerBasedGuess(double error1, double error2, int maxK, double funA = 1){
+			return calculateByNewtonRhapson(exp(funA) , error1, error2, maxK, funA);
+		}
+
+		// Chute burro
+		// Vê um intervalo ok com o nosso funA e chuta no meio dele
+		Answer calculateByNewtonRhapsonIntervalBasedGuess(double error1, double error2, int maxK, double funA = 1){
+			vector<double> resposta = calculateFunctionInterval(funA);
+			return calculateByNewtonRhapson( (resposta[0]+resposta[1])/2 , error1, error2, maxK, funA);
+		}
+
+		Answer calculateByFalsePositionNoInterval(double error1, double error2, int maxK, double funA = 1){
 			vector <double> resposta = calculateFunctionInterval(funA);
-			cout << "Intervalo: " << resposta[0] << "  " << resposta[1];
 			return calculateByFalsePosition(resposta[0], resposta[1], error1, error2, maxK, funA);
 		}
 
-		long double calculateByFalsePosition(double a, double b, double error1, double error2, int maxK, double funA =1){
+		Answer calculateByFalsePosition(double a, double b, double error1, double error2, int maxK, double funA =1){
 			clock_t start, end; start = clock(); 
-			long double x, fx, fa, fb, interval;
+			double x, fx, fa, fb, interval;
 			int k = 0;
 			interval = fabs(b-a);
 			
@@ -129,15 +163,14 @@ class Methods{
 				fx = rocketFunction(x,funA);
 				// fabs => retorna o módulo do double passado
 
-				if(fa*fb > 0){
-					cout << "NÃO HÁ TROCA DE SINAL NO INTERVALO ESCOLHIDO! ABORTAR PROGRAMA!";
-					return 0;
+				if(fa*fb > 0 || isnan(fx)){
+					end = clock(); 
+					return Answer("O intervalo é inválido!");
 				}
 				
 				if(fabs(fx) < error2 || k > maxK){
 					end = clock(); 
-					cout<< "\nTEMPO DE EXECUÇÃO: " << 1000*(double(end - start) / double(CLOCKS_PER_SEC)) << "\n"; 
-					return x;
+					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
 				}
 
 				if(fx*fa < 0){
@@ -148,16 +181,16 @@ class Methods{
 				}
 				interval = fabs(b-a);
 				if(interval <= error1){
+
 					end = clock(); 
-					cout<< "\nTEMPO DE EXECUÇÃO: " << 1000*(double(end - start) / double(CLOCKS_PER_SEC)) << "\n"; 
-					return x;
+					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
 				}
 				k ++;
 			}
 
 			
-			time(&end);
-			return x;
+			end = clock(); 
+			return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
 			
 		}
 };
