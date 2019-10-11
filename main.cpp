@@ -3,7 +3,7 @@
 #include <math.h>
 #include <cmath>
 #include "methods.hpp"
-#include "Answer.hpp"
+
 using namespace std;
 
 
@@ -46,17 +46,17 @@ int main() {
 		cout << "A resposta aproximada é: " << res << "\n\n";
 	}*/
 
-	Answer minhaResp;
-	cout << minhaResp.getErrorMessage();
-
-
-	Answer minhaResp2(123, 4, 0.753);
-	cout << minhaResp2.getResult();
-
-
-	Answer minhaResp3("Um erro desconhecido ocorreu!");
-	cout << minhaResp3.getErrorMessage();
-
-
+	Answer resposta = metodos.calculateByFalsePosition(1, 5,0.000001, 0.000001, 1000);
+	if(resposta.getErrorFlag()){
+		cout << "\nUm erro ocorreu!\n" << resposta.getErrorMessage() << "\n\n";
+	}
+	else{
+		cout << "\nCálculo da função concluída!";
+		cout << "\nResposta aproximada: " << resposta.getResult();
+		cout << "\nNúmero de iterações: " << resposta.getIterations();
+		cout << "\nTempo: " << resposta.getTime() << "\n\n";
+		
+	}
+	
 	return 0;
 }
