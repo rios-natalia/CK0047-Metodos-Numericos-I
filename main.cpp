@@ -9,7 +9,6 @@ using namespace std;
 
 
 int main() {
-	AnswerFrame answerFrame(10, {0,1,2,3,4,5,6,7,8,9},pow(10, -5));
 	vector<vector<double>> answer;
 	ConsoleTable ct(BASIC);
     ct.setPadding(1);
@@ -19,14 +18,17 @@ int main() {
     ct.addColumn("Posição Falsa");
     ct.addColumn("Newthon-Rhapson ");
 
+	vector<double> valuesA = {1,2,3,4,5,6,7,8,9,10};
+	AnswerFrame answerFrame(10, valuesA, pow(10, -5));
 	answer = answerFrame.getRoots();
+
 
 	for (int i = 0; i < 10; i++){
 		auto entry = new ConsoleTableRow(4);
-		entry->addEntry(to_string(i+1), 0);
+		entry->addEntry(to_string(valuesA[i]), 0);
 		entry->addEntry(to_string(answer[i][0]), 1);
 		entry->addEntry(to_string(answer[i][1]), 2);
-		entry->addEntry("Não tenho", 3);
+		entry->addEntry(to_string(answer[i][2]), 3);
 		ct.addRow(entry);
 	}
 

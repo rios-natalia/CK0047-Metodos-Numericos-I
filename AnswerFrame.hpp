@@ -16,27 +16,29 @@ public:
 };
 
 AnswerFrame:: AnswerFrame() {
-    double rootBissection;
-    double rootFalsePosition;
-    double rootNewtonRhapson;
+    Answer bissection;
+    Answer falsePosition;
+    Answer newtonRhapson;
     vector<double> rootsMethods;
     Methods methods;
-    rootBissection = methods.calculateByBissectionNoInterval(pow(10, -5), 1000, 1);
-    rootFalsePosition = methods.calculateByFalsePositionNoInterval(pow(10, -5), 1000, 1);
-    rootsMethods = {rootBissection, rootFalsePosition};
+    bissection = methods.calculateByBissectionNoInterval(pow(10, -5), 1000, 1);
+    falsePosition = methods.calculateByFalsePositionNoInterval(pow(10, -5), pow(10, -5), 1000, 1);
+    newtonRhapson = methods.calculateByNewtonRhapsonIntervalBasedGuess(pow(10, -5), pow(10, -5), 1000, 1);
+    rootsMethods = {bissection.getResult(), falsePosition.getResult(), newtonRhapson.getResult()};
     this->roots.push_back(rootsMethods);
 }
 
 AnswerFrame:: AnswerFrame(int number, vector<double> valuesA, double precision) {
-    double rootBissection;
-    double rootFalsePosition;
-    double rootNewtonRhapson;
+    Answer bissection;
+    Answer falsePosition;
+    Answer newtonRhapson;
     vector<double> rootsMethods;
     for (int i = 0; i < number; i++){
         Methods methods;
-        rootBissection = methods.calculateByBissectionNoInterval(precision, 1000, valuesA[i]);
-        rootFalsePosition = methods.calculateByFalsePositionNoInterval(precision, 1000, valuesA[i]);
-        rootsMethods = {rootBissection, rootFalsePosition};
+        bissection = methods.calculateByBissectionNoInterval(precision, 1000, valuesA[i]);
+        falsePosition = methods.calculateByFalsePositionNoInterval(precision, precision,  1000, valuesA[i]);
+        newtonRhapson = methods.calculateByNewtonRhapsonIntervalBasedGuess(precision, precision, 1000, valuesA[i]);
+        rootsMethods = {bissection.getResult(), falsePosition.getResult(), newtonRhapson.getResult()};
         this->roots.push_back(rootsMethods);
     }
 }
