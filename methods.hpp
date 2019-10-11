@@ -1,6 +1,7 @@
 #include <math.h>
 #include <iostream>
 #include <vector>
+#include <time.h>
 using namespace std;
 class Methods{
 	private:
@@ -38,16 +39,12 @@ class Methods{
 		double calculateFunction(double d, double a=1){
 			return rocketFunction(d,a);
 		};
-		
 		double calculateFunctionDerivative(double d, double a=1){
 			return rocketFunctionDerivative(d, a);
 		};
-		
 		vector<double> calculateFunctionInterval(double a=1){
 			return getInterval(a);
 		}
-		
-
 
 		// A, B e maxK podem ou não ser entradas
 		// Error é uma entrada (precisão)
@@ -87,31 +84,61 @@ class Methods{
 		    return x;
 		}
 
-
 		double calculateByBissectionNoInterval(double error, int maxK, double funA = 1){
 			vector<double> resposta = calculateFunctionInterval(funA);
 			cout << "Intervalo: " << resposta[0] << "  " << resposta[1];
 			return calculateByBissection(resposta[0], resposta[1], error, maxK, funA);
 		}
 		
-		double calculateByNewtonRhapson(double x0, double error1, double error2, int maxK, double funA = 1){
-			double fx = rocketFunction(x0, funA);
-			int k = 0;
-			
-			if(abs(fx) < error1){
-				return x0;
-			}
-			
-			while(k < maxK) {
-				double x1 = x0 - rocketFunction(x0, funA)/rocketFunctionDerivative(x0, funA);
-			    if(abs(rocketFunction(x1, funA)) < error1 || abs(x1-x0) < error2) {
-			    	return x1;
-			    }
-			    x0 = x1;
-			    k++;
-			  }
-			  return x0;
+		long double calculateByFalsePositionNoInterval(double error1, double error2, int maxK, double funA = 1){
+			vector <double> resposta = calculateFunctionInterval(funA);
+			cout << "Intervalo: " << resposta[0] << "  " << resposta[1];
+			return calculateByFalsePosition(resposta[0], resposta[1], error1, error2, maxK, funA);
 		}
-		
-};
 
+		long double calculateByFalsePosition(double a, double b, double error1, double error2, int maxK, double funA =1){
+			clock_t start, end; start = clock(); 
+			long double x, fx, fa, fb, interval;
+			int k = 0;
+			interval = fabs(b-a);
+			
+			while(k < maxK){
+				fa = rocketFunction(a,funA);
+				fb = rocketFunction(b,funA);
+
+				x = (a*fb - b*fa)/(fb-fa);
+				fx = rocketFunction(x,funA);
+				// fabs => retorna o módulo do double passado
+
+				if(fa*fb > 0){
+					cout << "NÃO HÁ TROCA DE SINAL NO INTERVALO ESCOLHIDO! ABORTAR PROGRAMA!";
+					return 0;
+				}
+				
+				if(fabs(fx) < error2 || k > maxK){
+					end = clock(); 
+					cout<< "\nTEMPO DE EXECUÇÃO: " << 1000*(double(end - start) / double(CLOCKS_PER_SEC)) << "\n"; 
+					return x;
+				}
+
+				if(fx*fa < 0){
+					b = x;
+				}
+				else if(fx*fb < 0){
+					a = x;
+				}
+				interval = fabs(b-a);
+				if(interval <= error1){
+					end = clock(); 
+					cout<< "\nTEMPO DE EXECUÇÃO: " << 1000*(double(end - start) / double(CLOCKS_PER_SEC)) << "\n"; 
+					return x;
+				}
+				k ++;
+			}
+
+			
+			time(&end);
+			return x;
+			
+		}
+};
