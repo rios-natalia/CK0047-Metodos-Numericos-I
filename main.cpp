@@ -46,7 +46,7 @@ int main() {
 		cout << "A resposta aproximada é: " << res << "\n\n";
 	}*/
 
-	Answer resposta = metodos.calculateByFalsePosition(1, 5,0.000001, 0.000001, 1000);
+	Answer resposta = metodos.calculateByNewtonRhapson(1e+21,0.000001, 0.000001, 1000, 50);
 	if(resposta.getErrorFlag()){
 		cout << "\nUm erro ocorreu!\n" << resposta.getErrorMessage() << "\n\n";
 	}

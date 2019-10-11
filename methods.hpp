@@ -108,11 +108,13 @@ class Methods{
 			
 			
 			while(k < maxK) {
-				if(rocketFunctionDerivative(x0, funA) == 0){
-					return Answer("O chute dado é inválido!");
-				}
+				
 				double x1 = x0 - rocketFunction(x0, funA)/rocketFunctionDerivative(x0, funA);
 				
+				if(isnan(x1) || isnan(fx) || rocketFunctionDerivative(x0, funA) == 0){
+					return Answer("O chute dado é inválido!");
+				}
+
 			    if(abs(rocketFunction(x1, funA)) < error1 || abs(x1-x0) < error2) {
 					end = clock(); 
 					return Answer(x1, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
@@ -122,6 +124,24 @@ class Methods{
 			  }
 			end = clock(); 
 			return Answer(x0, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+		}
+
+		// Nossa derivada precisa ser diferente de zero sempre, logo, se:
+		// -ln d + a - 1 != 0 então
+		// ln d != a - 1
+		// Portanto, é seguro chutar ln d = a
+		// Logo, nosso chute é e^a
+		// Infelizmente, esse chute ACERTA,então não vamos usá-lo
+		//                       :(
+		Answer calculateByNewtonRhapsonEulerBasedGuess(double error1, double error2, int maxK, double funA = 1){
+			return calculateByNewtonRhapson(exp(funA) , error1, error2, maxK, funA);
+		}
+
+		// Chute burro
+		// Vê um intervalo ok com o nosso funA e chuta no meio dele
+		Answer calculateByNewtonRhapsonIntervalBasedGuess(double error1, double error2, int maxK, double funA = 1){
+			vector<double> resposta = calculateFunctionInterval(funA);
+			return calculateByNewtonRhapson( (resposta[0]+resposta[1])/2 , error1, error2, maxK, funA);
 		}
 
 		Answer calculateByFalsePositionNoInterval(double error1, double error2, int maxK, double funA = 1){
