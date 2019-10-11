@@ -36,7 +36,7 @@ Dados de ***SAÍDA***:
 Índice | Item | Status
 -| - | - 
 1 | Bisseção |:heavy_check_mark:|
-2 | Posição Falsa |:x:|
+2 | Posição Falsa |:heavy_check_mark:|
 3 | Newton Raphson |:heavy_check_mark:|
 4 | Aplicar padrões |:x:|
 5 | Preparar quadro resposta |:x:|
