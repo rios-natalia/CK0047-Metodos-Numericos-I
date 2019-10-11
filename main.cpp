@@ -3,6 +3,7 @@
 #include <math.h>
 #include <cmath>
 #include "methods.hpp"
+#include "Answer.hpp"
 using namespace std;
 
 
@@ -31,7 +32,7 @@ int main() {
 		cout << "Digite o número máximo de iterações a ser utilizado: ";
 		cin >> maxK;
 	}
-	*/
+	
 	double x0;
 	cout << "Digite um chute inicial: ";
 	cin >> x0;
@@ -43,7 +44,19 @@ int main() {
 	}
 	else{
 		cout << "A resposta aproximada é: " << res << "\n\n";
-	}
-	
+	}*/
+
+	Answer minhaResp;
+	cout << minhaResp.getErrorMessage();
+
+
+	Answer minhaResp2(123, 4, 0.753);
+	cout << minhaResp2.getResult();
+
+
+	Answer minhaResp3("Um erro desconhecido ocorreu!");
+	cout << minhaResp3.getErrorMessage();
+
+
 	return 0;
 }
