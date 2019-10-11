@@ -54,8 +54,10 @@ class Methods{
 			clock_t start, end; start = clock(); 
 			double x, fx, fa, fb, interval;
 			int k = 0;
+			double previousX;
 		    interval = fabs(b-a);
 		    while(k < maxK){
+				previousX = x;
 		        x = (a+b)/2;
 		        fx = rocketFunction(x, funA);
 		        fa = rocketFunction(a, funA);
@@ -67,7 +69,8 @@ class Methods{
 
 		        if(interval <= error){
 					end = clock(); 
-					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+
+					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)), abs(previousX - x));
 		        }
 
 		        if(fx*fa < 0){
@@ -82,18 +85,23 @@ class Methods{
 		        k ++;
 		    }
 			end = clock(); 
-			return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+			return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)), abs(previousX - x));
 		}
 
 		Answer calculateByBissectionNoInterval(double error, int maxK, double funA = 1){
 			vector<double> resposta = calculateFunctionInterval(funA);
 			return calculateByBissection(resposta[0], resposta[1], error, maxK, funA);
 		}
+
+		// Padrão: a= 1, isolamento = (2, 3) e ε= 10^-5. 
+		//Usando maxK = 100 por padrão, mas pode ser especificado
+		Answer calculateByBissectionDefault(int maxK = 100){
+			return calculateByBissection(2, 3, 1e-5, maxK, 1);
+		}
 		
 		// OBSERVAÇÂO: O chute desse método jamais poderá <= 0!
 		Answer calculateByNewtonRhapson(double x0, double error1, double error2, int maxK, double funA = 1){
 			clock_t start, end; start = clock(); 
-
 			if(x0 <= 0){
 				end = clock(); 
 				return Answer("O chute dado é inválido!");
@@ -103,7 +111,7 @@ class Methods{
 			int k = 0;
 			if(abs(fx) < error1){
 				end = clock(); 
-				return Answer(x0, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+				return Answer(x0, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)), 0);
 			}
 			
 			
@@ -117,7 +125,7 @@ class Methods{
 
 			    if(abs(rocketFunction(x1, funA)) < error1 || abs(x1-x0) < error2) {
 					end = clock(); 
-					return Answer(x1, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+					return Answer(x1, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)), abs(x1-x0));
 			    }
 			    x0 = x1;
 			    k++;
@@ -144,6 +152,13 @@ class Methods{
 			return calculateByNewtonRhapson( (resposta[0]+resposta[1])/2 , error1, error2, maxK, funA);
 		}
 
+		// Padrão: a= 1, isolamento = (2, 3) e ε= 10^-5. 
+		// Usando maxK = 100 por padrão, mas pode ser especificado
+		// O chute é a metade do intervalo padrão, logo, 1.5
+		Answer calculateByNewtonRhapsonDefault(int maxK = 100){
+			return calculateByNewtonRhapson(1.5, 1e-5, 1e-5, maxK, 1);
+		}
+
 		Answer calculateByFalsePositionNoInterval(double error1, double error2, int maxK, double funA = 1){
 			vector <double> resposta = calculateFunctionInterval(funA);
 			return calculateByFalsePosition(resposta[0], resposta[1], error1, error2, maxK, funA);
@@ -152,13 +167,14 @@ class Methods{
 		Answer calculateByFalsePosition(double a, double b, double error1, double error2, int maxK, double funA =1){
 			clock_t start, end; start = clock(); 
 			double x, fx, fa, fb, interval;
+			double previousX;
 			int k = 0;
 			interval = fabs(b-a);
 			
 			while(k < maxK){
 				fa = rocketFunction(a,funA);
 				fb = rocketFunction(b,funA);
-
+				previousX = x;
 				x = (a*fb - b*fa)/(fb-fa);
 				fx = rocketFunction(x,funA);
 				// fabs => retorna o módulo do double passado
@@ -170,7 +186,7 @@ class Methods{
 				
 				if(fabs(fx) < error2 || k > maxK){
 					end = clock(); 
-					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)), abs(x-previousX));
 				}
 
 				if(fx*fa < 0){
@@ -183,14 +199,20 @@ class Methods{
 				if(interval <= error1){
 
 					end = clock(); 
-					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+					return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)), abs(x-previousX));
 				}
 				k ++;
 			}
 
 			
 			end = clock(); 
-			return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)));
+			return Answer(x, k, 1000*(double(end - start) / double(CLOCKS_PER_SEC)), abs(x-previousX));
 			
+		}
+
+		// Padrão: a = 1, isolamento = (2, 3) e ε= 10^-5. 
+		// Usando maxK = 100 por padrão, mas pode ser especificado
+		Answer calculateByFalsePositionDefault(int maxK = 100){
+			return calculateByFalsePosition(2, 3, 1e-5, 1e-5, maxK, 1);
 		}
 };
