@@ -52,7 +52,7 @@ class Methods{
 		// Não confundir funA (a constante da função) com a (início do intervalo)
 		Answer calculateByBissection(double a, double b, double error, int maxK, double funA = 1){
 			clock_t start, end; start = clock(); 
-			double x, fx, fa, fb, interval;
+			double x = 0, fx, fa, fb, interval;
 			int k = 0;
 			double previousX;
 		    interval = fabs(b-a);
@@ -166,7 +166,7 @@ class Methods{
 
 		Answer calculateByFalsePosition(double a, double b, double error1, double error2, int maxK, double funA =1){
 			clock_t start, end; start = clock(); 
-			double x, fx, fa, fb, interval;
+			double x = 0, fx, fa, fb, interval;
 			double previousX;
 			int k = 0;
 			interval = fabs(b-a);

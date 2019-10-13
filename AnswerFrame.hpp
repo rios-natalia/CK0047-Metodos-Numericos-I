@@ -59,11 +59,7 @@ AnswerFrame:: AnswerFrame(int number, vector<double> valuesA, double precision) 
     }
 }
 
-AnswerFrame::~ AnswerFrame() {
-    free(&answerBissection);
-    free(&answerFalsePosition);
-    free(&answerNewtonRhapson);
-}
+AnswerFrame::~ AnswerFrame() {}
 
 vector<vector<double>> AnswerFrame:: getBissection() {
     return this->answerBissection;

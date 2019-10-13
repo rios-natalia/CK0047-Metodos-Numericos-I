@@ -14,12 +14,12 @@ void ConsoleTable::printTable() {
 
     // Calculate column maxima
     std::vector<int> maxWidths(this->columns.size());
-    for (int row = 0; row < this->entries.size(); row++) {
-        for (int col = 0; col < this->columns.size(); col++) {
+    for (unsigned row = 0; row < this->entries.size(); row++) {
+        for (unsigned col = 0; col < this->columns.size(); col++) {
             std::string cellText = this->entries[row]->getEntry()[col];
-            if (this->columns[col].length() > maxWidths[col])
+            if ((int)this->columns[col].length() > maxWidths[col])
                 maxWidths[col] = this->columns[col].length();
-            if (maxWidths[col] < cellText.length()) {
+            if (maxWidths[col] < (int)cellText.length()) {
                 maxWidths[col] = cellText.length();
             }
         }
@@ -28,7 +28,7 @@ void ConsoleTable::printTable() {
     printHorizontalSeperator(maxWidths, SEPERATOR_TOP);
 
     // Print column values
-    for (int col = 0; col < this->columns.size(); col++) {
+    for (unsigned col = 0; col < this->columns.size(); col++) {
         std::string cellText = this->columns[col];
         int len = cellText.length();
         std::string paddedText = cellText + std::string(maxWidths[col] - len, ' ');
@@ -40,8 +40,8 @@ void ConsoleTable::printTable() {
     printHorizontalSeperator(maxWidths, SEPERATOR_MIDDLE);
 
     // Print cell values
-    for (int row = 0; row < this->entries.size(); row++) {
-        for (int col = 0; col < this->columns.size(); col++) {
+    for (unsigned row = 0; row < this->entries.size(); row++) {
+        for (unsigned col = 0; col < this->columns.size(); col++) {
             std::string cellText = this->entries[row]->getEntry()[col];
             std::string paddedText = cellText + std::string(maxWidths[col] - cellText.length(), ' ');
             std::cout << this->style_line_vertical << std::string(this->padding, ' ') << paddedText
@@ -56,7 +56,7 @@ void ConsoleTable::printTable() {
 }
 
 void ConsoleTable::printHorizontalSeperator(const std::vector<int> &maxWidths, HorizontalSeperator seperator) const {
-    for (int col = 0; col < columns.size(); ++col) {
+    for (unsigned col = 0; col < columns.size(); ++col) {
 
         switch (seperator) {
             case SEPERATOR_TOP: {
@@ -96,17 +96,17 @@ void ConsoleTable::addRow(ConsoleTableRow *item) {
 }
 
 bool ConsoleTable::removeRow(int index) {
-    if (index > this->entries.size())
+    if (index > (int)this->entries.size())
         return false;
     this->entries.erase(this->entries.begin() + index);
     return true;
 }
 
 bool ConsoleTable::editRow(std::string data, int row, int col) {
-    if(row > this->entries.size())
+    if(row > (int)this->entries.size())
         return false;
 
-    if(col > this->columns.size())
+    if(col > (int)this->columns.size())
         return false;
 
     auto entry = this->entries[row];
