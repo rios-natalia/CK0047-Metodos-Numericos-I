@@ -12,9 +12,9 @@ private:
     vector<vector<double>> answerNewtonRhapson;
 public:
     AnswerFrame();
-    AnswerFrame(int number, vector<double> valuesA, double precision);
-    AnswerFrame(int number, double lim_inf, double lim_sup, vector<double> valuesA, double precision);
-    AnswerFrame(int number, double x0, double lim_inf, double lim_sup, vector<double> valuesA, double precision);
+    AnswerFrame(int number, vector<double> valuesA, double precision1, double precision2);
+    AnswerFrame(int number, double lim_inf, double lim_sup, vector<double> valuesA, double precision1, double precision2);
+    AnswerFrame(int number, double x0, double lim_inf, double lim_sup, vector<double> valuesA, double precision1, double precision2);
     vector<vector<double>> getBissection();
     vector<vector<double>> getFalsePosition();
     vector<vector<double>> getNewtonRhapson();
@@ -40,7 +40,7 @@ AnswerFrame:: AnswerFrame() {
     this->answerNewtonRhapson.push_back(valuesNewtonRhapson);
 }
 	
-AnswerFrame:: AnswerFrame(int number, double lim_inf, double lim_sup, vector<double> valuesA, double precision) {
+AnswerFrame:: AnswerFrame(int number, double lim_inf, double lim_sup, vector<double> valuesA, double precision1,double precision2) {
 	Methods methods;
     Answer bissection;
     Answer falsePosition;
@@ -49,9 +49,9 @@ AnswerFrame:: AnswerFrame(int number, double lim_inf, double lim_sup, vector<dou
     vector<double> valuesFalsePosition;
     vector<double> valuesNewtonRhapson;
     for (int i = 0; i < number; i++){
-        bissection = methods.calculateByBissection(lim_inf,lim_sup,precision,1000,valuesA[i]);
-        falsePosition = methods.calculateByFalsePosition(lim_inf, lim_sup,precision, precision, 1000, valuesA[i]);
-        newtonRhapson = methods.calculateByNewtonRhapsonIntervalBasedGuess(precision, precision, 1000, valuesA[i]);
+        bissection = methods.calculateByBissection(lim_inf,lim_sup,precision1,1000,valuesA[i]);
+        falsePosition = methods.calculateByFalsePosition(lim_inf, lim_sup,precision1, precision2, 1000, valuesA[i]);
+        newtonRhapson = methods.calculateByNewtonRhapsonIntervalBasedGuess(precision1, precision2, 1000, valuesA[i]);
         valuesBissection = {bissection.getResult(), bissection.getAbsoluteError()};
         valuesFalsePosition = {falsePosition.getResult(), falsePosition.getAbsoluteError()};
         valuesNewtonRhapson = {newtonRhapson.getResult(), newtonRhapson.getAbsoluteError()};
@@ -61,7 +61,7 @@ AnswerFrame:: AnswerFrame(int number, double lim_inf, double lim_sup, vector<dou
     }
 }
 
-AnswerFrame:: AnswerFrame(int number, double x0, double lim_inf, double lim_sup, vector<double> valuesA, double precision) {
+AnswerFrame:: AnswerFrame(int number, double x0, double lim_inf, double lim_sup, vector<double> valuesA, double precision1, double precision2) {
     Methods methods;
     Answer bissection;
     Answer falsePosition;
@@ -70,9 +70,9 @@ AnswerFrame:: AnswerFrame(int number, double x0, double lim_inf, double lim_sup,
     vector<double> valuesFalsePosition;
     vector<double> valuesNewtonRhapson;
     for (int i = 0; i < number; i++){
-        bissection = methods.calculateByBissection(lim_inf,lim_sup,precision,1000,valuesA[i]);
-        falsePosition = methods.calculateByFalsePosition(lim_inf, lim_sup,precision, precision, 1000, valuesA[i]);
-        newtonRhapson = methods.calculateByNewtonRhapson(x0,precision, precision, 1000, valuesA[i]);
+        bissection = methods.calculateByBissection(lim_inf,lim_sup,precision1,1000,valuesA[i]);
+        falsePosition = methods.calculateByFalsePosition(lim_inf, lim_sup,precision1, precision2, 1000, valuesA[i]);
+        newtonRhapson = methods.calculateByNewtonRhapson(x0,precision1, precision2, 1000, valuesA[i]);
         valuesBissection = {bissection.getResult(), bissection.getAbsoluteError()};
         valuesFalsePosition = {falsePosition.getResult(), falsePosition.getAbsoluteError()};
         valuesNewtonRhapson = {newtonRhapson.getResult(), newtonRhapson.getAbsoluteError()};
@@ -83,7 +83,7 @@ AnswerFrame:: AnswerFrame(int number, double x0, double lim_inf, double lim_sup,
 }
 
 
-AnswerFrame:: AnswerFrame(int number, vector<double> valuesA, double precision) {
+AnswerFrame:: AnswerFrame(int number, vector<double> valuesA, double precision1, double precision2) {
     Methods methods;
     Answer bissection;
     Answer falsePosition;
@@ -93,9 +93,9 @@ AnswerFrame:: AnswerFrame(int number, vector<double> valuesA, double precision) 
     vector<double> valuesFalsePosition;
     vector<double> valuesNewtonRhapson;
     for (int i = 0; i < number; i++){
-        bissection = methods.calculateByBissectionNoInterval(precision, 1000, valuesA[i]);
-        falsePosition = methods.calculateByFalsePositionNoInterval(precision, precision, 1000, valuesA[i]);
-        newtonRhapson = methods.calculateByNewtonRhapsonIntervalBasedGuess(precision, precision, 1000, valuesA[i]);
+        bissection = methods.calculateByBissectionNoInterval(precision1, 1000, valuesA[i]);
+        falsePosition = methods.calculateByFalsePositionNoInterval(precision1, precision2, 1000, valuesA[i]);
+        newtonRhapson = methods.calculateByNewtonRhapsonIntervalBasedGuess(precision1, precision2, 1000, valuesA[i]);
         valuesBissection = {bissection.getResult(), bissection.getAbsoluteError()};
         valuesFalsePosition = {falsePosition.getResult(), falsePosition.getAbsoluteError()};
         valuesNewtonRhapson = {newtonRhapson.getResult(), newtonRhapson.getAbsoluteError()};

@@ -27,7 +27,7 @@ int main() {
 	falsePosition.setPadding(1);
 	newtonRhapson.setPadding(1);
 	Methods methods;
-	double n, err,input;
+	double n, err1, err2, input;
 	int option;
 
 	cout<< "-------------------------------------------------" <<endl;
@@ -61,12 +61,17 @@ int main() {
 			valuesA.push_back(input);
 		}
 
-		cout<< "-----------------" <<endl;
-		cout<<"Digite a precisão:" <<endl;
-		cout<< "-----------------" <<endl;
-		cin>> err;
+		cout<< "------------------" <<endl;
+		cout<<"Digite a precisão 1:" <<endl;
+		cout<< "------------------" <<endl;
+		cin>> err1;
 
-		AnswerFrame* answerFrame = new AnswerFrame(n, valuesA, err);
+		cout<< "--------------------" <<endl;
+		cout<<"Digite a precisão: 2" <<endl;
+		cout<< "--------------------" <<endl;
+		cin>> err2;
+
+		AnswerFrame* answerFrame = new AnswerFrame(n, valuesA, err1, err2);
 
 		answerBissection = answerFrame->getBissection();
 		answerFalsePosition = answerFrame->getFalsePosition();
@@ -178,10 +183,15 @@ int main() {
 		}
 
 		
-		cout<< "-----------------" <<endl;
-		cout<<"Digite a precisão:" <<endl;
-		cout<< "-----------------" <<endl;
-		cin>> err;
+		cout<< "------------------" <<endl;
+		cout<<"Digite a precisão 1:" <<endl;
+		cout<< "------------------" <<endl;
+		cin>> err1;
+
+		cout<< "------------------" <<endl;
+		cout<<"Digite a precisão 2:" <<endl;
+		cout<< "------------------" <<endl;
+		cin>> err2;
 
 		cout << "--------------------------------------" << endl;
 		cout << "Digite o limite inferior do intervalo:" << endl;
@@ -198,7 +208,7 @@ int main() {
 
 		if(option_newton == 0)  {
 
-			AnswerFrame* answerFrame = new AnswerFrame(n,a,b,valuesA, err);
+			AnswerFrame* answerFrame = new AnswerFrame(n,a,b,valuesA,err1,err2);
 
 			answerBissection = answerFrame->getBissection();
 			answerFalsePosition = answerFrame->getFalsePosition();
@@ -217,7 +227,7 @@ int main() {
 				cin >> guess;
 			}
 
-			AnswerFrame* answerFrame = new AnswerFrame(n,guess,a,b,valuesA, err);
+			AnswerFrame* answerFrame = new AnswerFrame(n,guess,a,b,valuesA, err1, err2);
 
 			answerBissection = answerFrame->getBissection();
 			answerFalsePosition = answerFrame->getFalsePosition();
@@ -318,7 +328,7 @@ int main() {
 		}
 		double err = 0.00001;
 
-		AnswerFrame* answerFrame = new AnswerFrame(n, valuesA, err);
+		AnswerFrame* answerFrame = new AnswerFrame(n,valuesA,err1,err2);
 
 		answerBissection = answerFrame->getBissection();
 		answerFalsePosition = answerFrame->getFalsePosition();
