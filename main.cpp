@@ -9,6 +9,13 @@ using namespace std;
 
 
 int main() {
+
+
+	int exit = 1;
+
+
+	while(exit!=0) {
+
 	vector<vector<double>> answerBissection;
 	vector<vector<double>> answerFalsePosition;
 	vector<vector<double>> answerNewtonRhapson;
@@ -35,6 +42,7 @@ int main() {
 	cin>> option;
 
 	if(option == 1) {
+		
 		cout<< "---------------------------" <<endl;
 		cout<<"Digite o número de foguetes:" <<endl;
 		cout<< "---------------------------" <<endl;
@@ -43,8 +51,13 @@ int main() {
 		cout<<"Digite o a de cada foguete:" <<endl;
 		cout<< "--------------------------" <<endl;
 
+
 		for(int i = 1;i <= n; i++) {
 			cin>>input;
+			while(input <=0) {
+				cout << "Valor de a inválido. Reinicie com valores válidos." << endl;
+				cin >> input;
+			}
 			valuesA.push_back(input);
 		}
 
@@ -74,32 +87,61 @@ int main() {
 
 
 		for (int i = 0; i < n; i++){
+			if(answerBissection[i][0] == -1 || answerBissection[i][1] ==-1) {
+				cout << "Método da bisseção falhou. Reinicie com parâmetros válidos." << endl;
+				return 0;
+			}
+
+			else {
+
 			auto entry = new ConsoleTableRow(3);
 			entry->addEntry(to_string(valuesA[i]), 0);
 			entry->addEntry(to_string(answerBissection[i][0]), 1);
 			entry->addEntry(to_string(answerBissection[i][1]), 2);
 			bissection.addRow(entry);
-		}
 
+			}
+			
+		}
+		
 		for (int i = 0; i < n; i++){
+
+			if(answerFalsePosition[i][0] == -1 || answerFalsePosition[i][1] ==-1) {
+				cout << "Método da posição falsa falhou. Reinicie com parâmetros válidos." << endl;
+				return 0;
+			}
+
+			else {
+
 			auto entry = new ConsoleTableRow(3);
 			entry->addEntry(to_string(valuesA[i]), 0);
 			entry->addEntry(to_string(answerFalsePosition[i][0]), 1);
 			entry->addEntry(to_string(answerFalsePosition[i][1]), 2);
 			falsePosition.addRow(entry);
+
+			}
+			
 		}
 
 		for (int i = 0; i < n; i++){
+
+
+			if(answerNewtonRhapson[i][0] == -1 || answerNewtonRhapson[i][1] ==-1) {
+				cout << "Método de Newton-Raphson falhou. Reinicie com parâmetros válidos." << endl;
+				return 0;
+			}
+
+			else {
+
 			auto entry = new ConsoleTableRow(3);
 			entry->addEntry(to_string(valuesA[i]), 0);
 			entry->addEntry(to_string(answerNewtonRhapson[i][0]), 1);
 			entry->addEntry(to_string(answerNewtonRhapson[i][1]), 2);
 			newtonRhapson.addRow(entry);
-		}
 
-		cout << "--------------------------------------------------" <<endl;
-		cout << "OBS: Se Resultado aproximado -1 -> Foguete explode" <<endl;
-		cout << "--------------------------------------------------" <<endl;
+			}
+			
+		}
 
     	// Print all entries
 		cout << "BISSEÇÃO" << endl;
@@ -108,13 +150,15 @@ int main() {
 		falsePosition.printTable();
 		cout << "NEWTON-RHAPSON" << endl;
 		newtonRhapson.printTable();
-		return 0;
+
+		cout << "Se deseja fazer outros testes, digite 1. Caso contrário, digite 0." << endl;
+		cin >> exit; 
 
 	}
 
 	else if(option==2) {
 
-		double a,b,n,guess;
+		double a,b,n,guess,option_newton;
 
 		cout<< "---------------------------" <<endl;
 		cout<<"Digite o número de foguetes:" <<endl;
@@ -126,32 +170,61 @@ int main() {
 
 		for(int i = 1;i <= n; i++) {
 			cin>>input;
+			while(input <=0) {
+				cout << "Valor de a inválido. Reinicie com valores válidos." << endl;
+				cin >> input;
+			}
 			valuesA.push_back(input);
 		}
 
+		
 		cout<< "-----------------" <<endl;
 		cout<<"Digite a precisão:" <<endl;
 		cout<< "-----------------" <<endl;
 		cin>> err;
 
-		cout<< "-----------------------" <<endl;
-		cout<<"Digite um chute para x0:" <<endl;
-		cout<< "-----------------------" <<endl;
-		cin>> guess;
-      
+		cout << "--------------------------------------" << endl;
+		cout << "Digite o limite inferior do intervalo:" << endl;
+		cout << "--------------------------------------" << endl;
+		cin >> a;
+		cout << "--------------------------------------" << endl;
+		cout << "Digite o limite superior do intervalo:" << endl;
+		cout << "--------------------------------------" << endl;
+		cin >> b;
 
-		while(guess <=0) {
-			cout<<"Chute inválido. Escolha outro valor." <<endl;
-			cin>>guess;
+
+		cout << "Se quiser chutar x0, digite 1. Caso contrário, digite 0." << endl;
+		cin >> option_newton;
+
+		if(option_newton == 0)  {
+
+			AnswerFrame* answerFrame = new AnswerFrame(n,a,b,valuesA, err);
+
+			answerBissection = answerFrame->getBissection();
+			answerFalsePosition = answerFrame->getFalsePosition();
+			answerNewtonRhapson = answerFrame->getNewtonRhapson();
+
 		}
 
+		else {
+
+			guess = 1;
+			cout << "Digite o valor do chute:" << endl;
+			cin >> guess;
+
+			while(guess <=0) {
+				cout << "Valor inválido. Digite outro chute." << endl;
+				cin >> guess;
+			}
+
+			AnswerFrame* answerFrame = new AnswerFrame(n,guess,a,b,valuesA, err);
+
+			answerBissection = answerFrame->getBissection();
+			answerFalsePosition = answerFrame->getFalsePosition();
+			answerNewtonRhapson = answerFrame->getNewtonRhapson();
+		}
 		
-		AnswerFrame* answerFrame = new AnswerFrame(n,guess,a,b,valuesA, err);
-
-		answerBissection = answerFrame->getBissection();
-		answerFalsePosition = answerFrame->getFalsePosition();
-		answerNewtonRhapson = answerFrame->getNewtonRhapson();
-
+		
 
 		bissection.addColumn("Valor de a");
 		bissection.addColumn("Resultado Aproximado");
@@ -166,32 +239,61 @@ int main() {
 		newtonRhapson.addColumn("Erro Absoluto");
 
 		for (int i = 0; i < n; i++){
+			if(answerBissection[i][0] == -1 || answerBissection[i][1] ==-1) {
+				cout << "Método da bisseção falhou. Reinicie com parâmetros válidos." << endl;
+				return 0;
+			}
+
+			else {
+
 			auto entry = new ConsoleTableRow(3);
 			entry->addEntry(to_string(valuesA[i]), 0);
 			entry->addEntry(to_string(answerBissection[i][0]), 1);
 			entry->addEntry(to_string(answerBissection[i][1]), 2);
 			bissection.addRow(entry);
-		}
 
+			}
+			
+		}
+		
 		for (int i = 0; i < n; i++){
+
+			if(answerFalsePosition[i][0] == -1 || answerFalsePosition[i][1] ==-1) {
+				cout << "Método da posição falsa falhou. Reinicie com parâmetros válidos." << endl;
+				return 0;
+			}
+
+			else {
+
 			auto entry = new ConsoleTableRow(3);
 			entry->addEntry(to_string(valuesA[i]), 0);
 			entry->addEntry(to_string(answerFalsePosition[i][0]), 1);
 			entry->addEntry(to_string(answerFalsePosition[i][1]), 2);
 			falsePosition.addRow(entry);
+
+			}
+			
 		}
 
 		for (int i = 0; i < n; i++){
+
+
+			if(answerNewtonRhapson[i][0] == -1 || answerNewtonRhapson[i][1] ==-1) {
+				cout << "Método de Newton-Raphson falhou. Reinicie com parâmetros válidos." << endl;
+				return 0;
+			}
+
+			else {
+
 			auto entry = new ConsoleTableRow(3);
 			entry->addEntry(to_string(valuesA[i]), 0);
 			entry->addEntry(to_string(answerNewtonRhapson[i][0]), 1);
 			entry->addEntry(to_string(answerNewtonRhapson[i][1]), 2);
 			newtonRhapson.addRow(entry);
-		}
 
-		cout << "--------------------------------------------------" <<endl;
-		cout << "OBS: Se Resultado aproximado -1 -> Foguete explode" <<endl;
-		cout << "--------------------------------------------------" <<endl;
+			}
+			
+		}
 
 		
     	// Print all entries
@@ -201,11 +303,14 @@ int main() {
 		falsePosition.printTable();
 		cout << "NEWTON-RHAPSON" << endl;
 		newtonRhapson.printTable();
-		return 0;
+
+		cout << "Se deseja fazer outros testes, digite 1. Caso contrário, digite 0." << endl;
+		cin >> exit; 
 
 	}
 	
 	else {
+
 		double n = 1;
 
 		for(int i = 1;i <= n; i++) {
@@ -257,9 +362,6 @@ int main() {
 			newtonRhapson.addRow(entry);
 		}
 
-		cout << "--------------------------------------------------" <<endl;
-		cout << "OBS: Se Resultado aproximado -1 -> Foguete explode" <<endl;
-		cout << "--------------------------------------------------" <<endl;
 
     	// Print all entries
 		cout << "BISSEÇÃO" << endl;
@@ -268,8 +370,18 @@ int main() {
 		falsePosition.printTable();
 		cout << "NEWTON-RHAPSON" << endl;
 		newtonRhapson.printTable();
-		return 0;
-	}
+
+		cout << "Se deseja fazer outros testes, digite 1. Caso contrário, digite 0." << endl;
+		cin >> exit; 
+
+		}
 	
+	}
+
+	return 0;
 
 }
+
+
+
+	
